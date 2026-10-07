@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+<title>小手机 · imitation-mobile-phone</title>
+<style>
+/* ============================================================
+   0. 基础与设计令牌
+   ============================================================ */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body,#app{height:100%;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro SC","PingFang SC","Helvetica Neue",Arial,sans-serif;
+  background:#d9d9e0;color:var(--fg);overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+:root{
+  --bg:#f4f4f6; --card:#ffffff; --card2:#fafafb;
+  --fg:#1c1c1e; --fg2:#7a7a80; --fg3:#b3b3b9;
+  --line:rgba(0,0,0,.07); --line2:rgba(0,0,0,.045);
+  --acc:#8b87a8; --acc2:#a9b6c4; --acc-l:rgba(139,135,168,.1);
+  --danger:#c96a6a; --ok:#7fa886;
+  --sb:44px; --dock:88px;
+  --r:20px; --r2:14px; --r3:10px;
+  --sh:0 6px 26px rgba(0,0,0,.07);
+  --sh2:0 2px 10px rgba(0,0,0,.05);
+}
+.phone.dark{
+  --bg:#161618; --card:#1f1f22; --card2:#232326;
+  --fg:#f2f2f4; --fg2:#9a9aa2; --fg3:#6a6a72;
+  --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.05);
+  --acc:#a49fc4; --acc-l:rgba(164,159,196,.14);
+  --sh:0 6px 26px rgba(0,0,0,.4); --sh2:0 2px 10px rgba(0,0,0,.3);
+}
+::-webkit-scrollbar{width:0;height:0}
+
+/* ============================================================
+   1. 手机外壳 / 状态栏 / 屏幕
+   ============================================================ */
+.phone{
+  position:relative;width:100%;height:100%;
+  display:flex;flex-direction:column;overflow:hidden;background:var(--bg);
+}
+.statusbar{
+  height:var(--sb);flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;font-size:13px;font-weight:600;letter-spacing:.2px;
+  position:relative;z-index:200;color:var(--fg);pointer-events:none;
+}
+.statusbar .sb-r{display:flex;align-items:center;gap:5px}
+.screen{position:relative;flex:1;overflow:hidden;isolation:isolate}
+
+/* 视图过渡 */
+.appview{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;z-index:10}
+.push-enter-active,.pop-enter-active{transition:transform .26s cubic-bezier(.32,.72,0,1),opacity .26s}
+.push-leave-active,.pop-leave-active{transition:transform .26s cubic-bezier(.32,.72,0,1),opacity .26s}
+.push-enter-from{transform:translateX(100%)}
+.push-leave-to{transform:translateX(-22%);opacity:.5}
+.pop-enter-from{transform:translateX(-22%);opacity:.5}
+.pop-leave-to{transform:translateX(100%)}
+
+/* ============================================================
+   2. 通用应用骨架
+   ============================================================ */
+.app{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.nav{
+  height:52px;flex:0 0 auto;display:flex;align-items:center;gap:4px;padding:0 8px;
+  background:var(--card);border-bottom:1px solid var(--line);position:relative;z-index:6;
+}
+.nav .nav-title{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-weight:650;font-size:16px;white-space:nowrap;max-width:52%;overflow:hidden;text-overflow:ellipsis;
+}
+.nav-btn{
+  width:38px;height:38px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;border:0;background:none;color:var(--fg);cursor:pointer;transition:background .15s;
+}
+.nav-btn:active{background:rgba(125,125,135,.14)}
+.nav-btn.ghost{opacity:.28}
+.nav-spacer{flex:1}
+.body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:8px}
+.body.nopad{padding-bottom:0}
+
+/* ============================================================
+   3. 通用控件
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 18px;border-radius:12px;border:1px solid var(--line);
+  background:var(--card);color:var(--fg);font-size:14px;font-weight:550;cursor:pointer;
+  transition:transform .12s,background .15s;font-family:inherit;
+}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--fg);color:var(--bg);border-color:transparent}
+.btn.acc{background:var(--acc);color:#fff;border-color:transparent}
+.btn.danger{color:var(--danger)}
+.btn.sm{padding:7px 12px;font-size:13px;border-radius:10px}
+.btn.block{display:flex;width:100%}
+.field{margin-bottom:14px}
+.field>label{display:block;font-size:12.5px;font-weight:600;color:var(--fg2);margin-bottom:6px;letter-spacing:.2px}
+.input,textarea.input{
+  width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--line);
+  background:var(--card2);color:var(--fg);font-size:14px;font-family:inherit;outline:none;
+  transition:border-color .15s;resize:vertical;
+}
+.input:focus{border-color:var(--acc)}
+textarea.input{line-height:1.6;min-height:80px}
+select.input{appearance:none;background-image:none}
+.row{display:flex;gap:10px;align-items:center}
+.row.wr
